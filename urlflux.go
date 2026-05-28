@@ -114,7 +114,7 @@ func worker(jobs <-chan string, results chan<- string, proxyURL *url.URL, concur
 		if strings.HasPrefix(input, "http://") || strings.HasPrefix(input, "https://") {
 			urlsToTry = []string{input}
 		} else {
-			urlsToTry = []string{"https://" + input, "http://" + input}
+			urlsToTry = []string{"https://" + input, "http://" + input, "https://www." + input, "http://www." + input}
 		}
 
 		success := false
@@ -126,9 +126,15 @@ func worker(jobs <-chan string, results chan<- string, proxyURL *url.URL, concur
 			}
 
 			// Instantiate default collector
+			allowedHosts := []string{hostname}
+			if strings.HasPrefix(hostname, "www.") {
+				allowedHosts = append(allowedHosts, strings.TrimPrefix(hostname, "www."))
+			} else {
+				allowedHosts = append(allowedHosts, "www."+hostname)
+			}
 			c := colly.NewCollector(
 				// limit crawling to the domain of the specified URL
-				colly.AllowedDomains(hostname),
+				colly.AllowedDomains(allowedHosts...),
 				// set MaxDepth to the specified depth
 				colly.MaxDepth(*depth),
 				// specify Async for threading

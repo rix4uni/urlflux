@@ -39,7 +39,7 @@ cd urlflux; go install
 ```
 
 **Features:**
-- **Auto protocol fallback** — bare domains like `example.com` automatically try `https://` first, then fall back to `http://`
+- **Auto protocol fallback** — bare domains like `example.com` automatically try `https://`, `http://`, `https://www.`, `http://www.`, then fall back to the next subdomain
 - **Random user-agent** — every request uses a random realistic user-agent string
 - **Built-in parameter extraction** — automatically discovers input/textarea names and appends them as `name=rix4uni`
 - **Deduplicated output** — all URLs are deduplicated automatically
